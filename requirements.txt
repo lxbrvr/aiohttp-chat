@@ -1,0 +1,5 @@
+aiohttp==3.5.4
+ipython
+motor==2.0.0
+PyJWT==1.7.1
+uvloop==0.13.0
