@@ -8,8 +8,18 @@ services:
       - "8000:8000"
     volumes:
       - ./src:/app/src
+      - ./docs/api.yaml:/app/docs/api.yaml
     depends_on:
       - mongodb
 
   mongodb:
     image: mongo
+
+  redoc:
+    image: redocly/redoc
+    ports:
+      - "8001:80"
+    depends_on:
+      - backend
+    environment:
+      - SPEC_URL=http://0.0.0.0:8000/api/specification/

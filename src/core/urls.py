@@ -1,6 +1,10 @@
 import typing as t
 import importlib
 
+import aiohttp_cors
+
+from conf import settings
+
 
 class URLPattern:
     """
@@ -41,6 +45,27 @@ def setup_routes(app: 'Application', url_paths: t.Sequence[str]) -> None:
                 handler=url_pattern.handler,
                 name=url_pattern.name,
             )
+
+
+def setup_cors(app: 'Application') -> None:
+    """
+    Adds CORS headers to all routes.
+    """
+
+    cors = aiohttp_cors.setup(app)
+
+    for route in list(app.router.routes()):
+        cors.add(
+            routing_entity=route,
+            config={
+                origin: aiohttp_cors.ResourceOptions(
+                    allow_credentials=settings.CORS_ALLOWED_CREDENTIALS,
+                    expose_headers=settings.CORS_ALLOWED_METHODS,
+                    allow_headers=settings.CORS_ALLOWED_HEADERS,
+                    allow_methods=settings.CORS_ALLOWED_METHODS,
+                ) for origin in settings.CORS_ALLOWED_ORIGINS
+            }
+        )
 
 
 url = URLPattern

@@ -1,0 +1,406 @@
+openapi: "3.0.2"
+
+info:
+  version: 1.0.0
+  title: Chat
+
+servers:
+  - url: http://0.0.0.0:8000/
+
+tags:
+  - name: Messages
+  - name: Users
+
+paths:
+  /messages/:
+    get:
+      summary: List all messages
+      tags:
+        - Messages
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          description: The numbers of items to return
+          schema:
+            $ref: "#/components/schemas/Limit"
+        - name: offset
+          in: query
+          description: The number of items to skip before starting to collect the result set
+          schema:
+            $ref: "#/components/schemas/Offset"
+      responses:
+        '200':
+          description: A paged array of messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Messages"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a message
+      tags:
+        - Messages
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        '400':
+          description: Bad request
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /messages/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Info for a specific message
+      tags:
+        - Messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the message to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          $ref: "#/components/responses/ForbiddenError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+
+    put:
+      summary: Update a specific message
+      tags:
+        - Messages
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/Message'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of a message to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+        '400':
+          description: Bad request
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          $ref: "#/components/responses/ForbiddenError"
+    delete:
+      summary: Delete a specific message
+      tags:
+        - Messages
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          $ref: "#/components/responses/ForbiddenError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+
+  /users/:
+    get:
+      summary: List all users
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          description: The numbers of items to return
+          schema:
+            $ref: "#/components/schemas/Limit"
+        - name: offset
+          in: query
+          description: The number of items to skip before starting to collect the result set
+          schema:
+            $ref: "#/components/schemas/Offset"
+      responses:
+        '200':
+          description: A paged array of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+    post:
+      summary: Create an user
+      tags:
+        - Users
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Expected response to a valid request
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /users/{user_id}/:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Info for a specific user
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '403':
+          $ref: "#/components/responses/ForbiddenError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+
+  /users/me/:
+    get:
+      summary: Info for a request user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the user to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+    put:
+      summary: Update a current user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of an user to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad request
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+    patch:
+      summary: Patch a current user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/User'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of an user to retrieve
+          schema:
+            type: string
+            example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '400':
+          description: Bad request
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /access-token/:
+    post:
+      summary: Create an access token
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          content:
+            description: Successful operation
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+        '400':
+          description: Expected response to a valid request
+    delete:
+      summary: Delete an access token
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+
+    NotFoundError:
+      description: Not found
+
+    ForbiddenError:
+      description: Forbidden
+
+  schemas:
+    Id:
+      type: string
+      example: "716a9371-d5e2-4490-a36b-dc8e271c3094"
+      readOnly: true
+
+    Limit:
+      type: integer
+      minimum: 1
+      maximum: 100
+      default: 20
+
+    Offset:
+      type: integer
+      minimum: 0
+      default: 0
+
+    AccessToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        username:
+          type: string
+          example: "John"
+        password:
+          type: string
+          example: "password"
+          writeOnly: true
+
+    Users:
+      type: array
+      items:
+        $ref: "#/components/schemas/User"
+
+    Message:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        text:
+          type: string
+          example: "text message"
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        author:
+          allOf:
+            - $ref: "#/components/schemas/User"
+            - readOnly: true
+
+    Messages:
+      type: array
+      items:
+        $ref: "#/components/schemas/Message"
+
+  requestBodies:
+    User:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+        required: true
+
+    Message:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Message'
+        required: true

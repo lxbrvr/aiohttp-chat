@@ -6,7 +6,7 @@ from motor import motor_asyncio
 from aiohttp import web, WSCloseCode
 
 from conf import settings
-from core.urls import setup_routes
+from core.urls import setup_routes, setup_cors
 
 
 class Application(web.Application):
@@ -17,6 +17,7 @@ class Application(web.Application):
         self.mongo_client = None
 
         self.setup_routes()
+        self.setup_cors()
 
         self.on_startup.append(self.startup_mongodb)
         self.on_cleanup.append(self.cleanup_mongodb)
@@ -24,6 +25,9 @@ class Application(web.Application):
 
     def setup_routes(self) -> None:
         setup_routes(app=self, url_paths=settings.URLS)
+
+    def setup_cors(self) -> None:
+        setup_cors(self)
 
     async def startup_mongodb(self, app: Application) -> None:
         app.mongo_client = motor_asyncio.AsyncIOMotorClient(settings.MONGO_URL)

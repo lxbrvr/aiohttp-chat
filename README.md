@@ -20,3 +20,7 @@ Commands can be run from the root of the directory.
 | make dev | Runs the development server on http://0.0.0.0:8000. |
 | make clean_db | Cleans the database. |
 | make populate_db | Populates the database with fake data. |
+
+## OpenAPI
+
+The OpenAPI specification is available at http://0.0.0.0:8001

@@ -3,3 +3,5 @@ ipython
 motor==2.0.0
 PyJWT==1.7.1
 uvloop==0.13.0
+pyyaml==5.1.2
+aiohttp_cors==0.7.0
