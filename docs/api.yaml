@@ -285,8 +285,6 @@ paths:
       summary: Create an access token
       tags:
         - Users
-      security:
-        - bearerAuth: []
       responses:
         '201':
           content:
